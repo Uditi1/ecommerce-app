@@ -55,6 +55,7 @@ const StackNavigator = () => {
           options={{
             tabBarLabel: 'Cart',
             tabBarLabelStyle: {color: '#008E97'},
+            headerShown: false,
             tabBarIcon: ({focused}) =>
               focused ? (
                 <AntDesign name="shoppingcart" size={24} color="#008E97" />
