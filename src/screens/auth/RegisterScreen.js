@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   KeyboardAvoidingView,
   StyleSheet,
@@ -13,12 +14,44 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import InputBox from '../../utils/ui/InputBox';
 import Button from '../../utils/ui/Button';
 import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import {MYAPI} from '@env'
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const handleRegister = () => {
+    const user = {
+      name: name,
+      email: email,
+      password: password,
+    };
+   
+    // send a POST  request to the backend API to register the user
+    axios
+      .post(`${MYAPI}/register`, user)
+      .then(response => {
+
+        Alert.alert(
+          'Registration successful',
+          'You have been registered Successfully',
+        );
+        setName('');
+        setEmail('');
+        setPassword('');
+      })
+      .catch(error => {
+        if (error.response) {
+          Alert.alert(
+            'Registration Error',
+            'An error occurred while registering',
+          );
+        }
+      });
+  };
 
   return (
     <SafeAreaView
@@ -112,6 +145,7 @@ const RegisterScreen = () => {
         <View style={{marginTop: 80}} />
 
         <Button
+          onPress={handleRegister}
           containStyles={{
             width: 200,
             backgroundColor: '#FEBE10',

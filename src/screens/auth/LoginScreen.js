@@ -1,23 +1,62 @@
 import {
+  Alert,
   Image,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import InputBox from '../../utils/ui/InputBox';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Button from '../../utils/ui/Button';
 import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import {MYAPI} from '@env'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
+ 
+  const handleLogin = () => {
+    const user = {
+      email: email,
+      password: password,
+    };
+
+    axios
+      .post(`${MYAPI}/login`, user)
+      .then(response => {
+        console.log(response);
+        const token = response.data.token;
+        AsyncStorage.setItem('authToken', token);
+        navigation.replace('Main');
+      })
+      .catch(error => {
+        Alert.alert('Login Error', 'Invalid Email');
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem('authToken');
+
+        if (token) {
+          navigation.replace('Main');
+        }
+      } catch (err) {
+        console.log('error message', err);
+      }
+    };
+    checkLoginStatus();
+  }, []);
   return (
     <SafeAreaView
       style={{
@@ -49,8 +88,8 @@ const LoginScreen = () => {
 
         <View style={{marginTop: 70}}>
           <InputBox
-           value={email}
-           onChangeText={(text) => setEmail(text)}
+            value={email}
+            onChangeText={text => setEmail(text)}
             icons={
               <MaterialIcons
                 style={{marginLeft: 8}}
@@ -59,12 +98,12 @@ const LoginScreen = () => {
                 color="gray"
               />
             }
-            textStyle={{ fontSize: email ? 16 : 16 }}
+            textStyle={{fontSize: email ? 16 : 16}}
             placeholder="Enter your Email"
           />
           <InputBox
             value={password}
-            onChangeText={(text) => setPassword(text)}
+            onChangeText={text => setPassword(text)}
             secureTextEntry={true}
             icons={
               <AntDesign
@@ -74,7 +113,7 @@ const LoginScreen = () => {
                 color="gray"
               />
             }
-            textStyle={{ fontSize: password ? 16 : 16 }}
+            textStyle={{fontSize: password ? 16 : 16}}
             placeholder="Enter your Password"
           />
         </View>
@@ -96,6 +135,7 @@ const LoginScreen = () => {
         <View style={{marginTop: 80}} />
 
         <Button
+          onPress={handleLogin}
           containStyles={{
             width: 200,
             backgroundColor: '#FEBE10',
