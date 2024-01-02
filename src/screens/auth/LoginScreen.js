@@ -14,6 +14,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Button from '../../utils/ui/Button';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
+import {MYAPI} from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
@@ -29,7 +30,7 @@ const LoginScreen = () => {
     };
 
     axios
-      .post('http://192.168.1.10:8000/login', user)
+      .post(`${MYAPI}/login`, user)
       .then(response => {
         console.log(response);
         const token = response.data.token;
@@ -41,7 +42,7 @@ const LoginScreen = () => {
         console.log(error);
       });
   };
-  
+
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {

@@ -13,13 +13,15 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 app.listen(port, () => {
   console.log('Server is running on port 8000');
 });
 
+
 mongoose
-  .connect('mongodb+srv://udititiwari:uditi@cluster0.qy1t5ke.mongodb.net/', {
+  .connect(process.env.MONGODB_URL , {
     // useNewUrlParser: true,
     // useUnifiedTopology: true,
   })
@@ -40,7 +42,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
     service: 'gmail',
     auth: {
       user: 'udititiwari@gmail.com',
-      pass: 'drxr bllg yrxe waqm ',
+      pass: process.env.NODEMAILERS,
     },
   });
 

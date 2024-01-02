@@ -15,6 +15,7 @@ import InputBox from '../../utils/ui/InputBox';
 import Button from '../../utils/ui/Button';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
+import {MYAPI} from '@env'
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -28,10 +29,10 @@ const RegisterScreen = () => {
       email: email,
       password: password,
     };
-    console.log(user);
+   
     // send a POST  request to the backend API to register the user
     axios
-      .post('http://192.168.1.10:8000/register', user)
+      .post(`${MYAPI}/register`, user)
       .then(response => {
 
         Alert.alert(
