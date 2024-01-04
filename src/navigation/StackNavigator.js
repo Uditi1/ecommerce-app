@@ -9,6 +9,7 @@ import HomeScreen from '../screens/dashboard/HomeScreen';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import ProductInfoScreen from '../screens/products/ProductInfoScreen';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -84,6 +85,11 @@ const StackNavigator = () => {
          <Stack.Screen
           name="Main"
           component={BottomTabs}
+          options={{ headerShown: false }}
+        />
+         <Stack.Screen
+          name="Info"
+          component={ProductInfoScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
